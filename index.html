@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Free Barcode & QR Code Generator - Generate, PNG Download & Print</title>
+  <meta name="description" content="Generate EAN-13, UPC-A, EAN-8, ITF, Code 39, Code 128 barcodes and QR codes instantly. Free online tool to create, download as PNG, and print barcodes for products, inventory, and more.">
+  <meta name="keywords" content="barcode generator, QR code generator, free barcode, EAN-13, UPC-A, EAN-8, ITF, Code 39, Code 128, create barcode, print barcode, download barcode, free barcode generator, online barcode tool">
+  <meta name="author" content="Your Name or Barcode Generator Team">
+  <link rel="canonical" href="https://www.yourwebsite.com/"> <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <!-- add new link  -->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+  <header class="flex justify-between items-center px-6 py-4 shadow bg-white dark:bg-gray-800 sticky top-0 z-10">
+    <div class="flex items-center space-x-3">
+      <img src="assets/logo.png" alt="Barcode Generator Logo" class="h-10 w-10" />
+      <h1 class="text-xl font-semibold"> <a href="index.html">Barcode Generator </a></h1>
+    </div>
+    <button id="darkModeToggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200" aria-label="Toggle Dark Mode">
+      <i class="fas fa-moon"></i>
+    </button>
+  </header>
+
+  <main class="flex-grow max-w-3xl mx-auto px-4 py-8 w-full">
+    <section class="mb-8">
+        <h2 class="text-3xl font-bold text-center mb-4">Generate Barcodes & QR Codes Instantly</h2>
+        <p class="text-center text-lg text-gray-700 dark:text-gray-300">Create high-quality barcodes for various applications, including retail, inventory, and logistics. Download in PNG format or print directly.</p>
+    </section>
+
+    <form id="barcodeForm" class="space-y-6 p-6 bg-white dark:bg-gray-800 shadow-lg rounded-lg mb-8">
+      <div>
+        <label for="barcodeType" class="block font-semibold text-lg mb-2">Barcode Type</label>
+        <select id="barcodeType" class="w-full p-3 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <option value="ean13">EAN-13</option>
+          <option value="upca">UPC-A</option>
+          <option value="ean8">EAN-8</option>
+          <option value="itf">ITF</option>
+          <option value="code39">Code 39</option>
+          <option value="code128">Code 128</option>
+          <option value="qrcode">QR Code</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="barcodeData" class="block font-semibold text-lg mb-2">Data</label>
+        <textarea id="barcodeData" rows="5" placeholder="Enter one or more values (one per line)&#10;Example:&#10;1234567890123&#10;YOUR_PRODUCT_CODE&#10;https://www.example.com" class="w-full p-3 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <input type="checkbox" id="includeText" checked class="h-5 w-5 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500 dark:bg-gray-600 dark:border-gray-500">
+        <label for="includeText" class="text-base">Include Text Below Barcode</label>
+      </div>
+
+      <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0">
+        <button type="submit" id="generateBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-md w-full sm:w-auto transition-colors duration-200">Generate Barcode(s)</button>
+        <button type="button" id="clearBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-md w-full sm:w-auto transition-colors duration-200">Clear</button>
+        <button type="button" id="downloadBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-3 rounded-md w-full sm:w-auto transition-colors duration-200" disabled>Download PNG</button>
+        <button type="button" id="printBtn" class="bg-gray-700 hover:bg-gray-800 text-white font-bold px-6 py-3 rounded-md w-full sm:w-auto transition-colors duration-200" disabled>Print</button>
+      </div>
+      
+      <div id="loadingSpinner" class="hidden flex justify-center items-center mt-4">
+        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+      </div>
+    </form>
+
+    <section id="barcodePreviewSection" class="mb-12">
+      <h2 class="text-2xl font-semibold mb-4 text-center">Barcode Preview</h2>
+      <div id="barcodePreview" class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 min-h-[180px] overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <p id="noBarcodeMessage" class="text-center text-gray-500 dark:text-gray-400 col-span-full">Your generated barcodes will appear here.</p>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="text-2xl font-semibold mb-6 text-center">How to Use This Website</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <article class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-200">
+          <img src="https://placehold.co/80x80/png?text=Select+Type" alt="Illustration of selecting barcode type from dropdown menu" class="mb-4 rounded-full" />
+          <h3 class="font-semibold text-lg mb-2">Step 1: Select Barcode Type</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">Choose from EAN-13, UPC-A, EAN-8, ITF, Code 39, Code 128, or QR Code in the dropdown menu.</p>
+        </article>
+        <article class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-200">
+          <img src="https://placehold.co/80x80/png?text=Enter+Data" alt="Illustration of entering data into input field" class="mb-4 rounded-full" />
+          <h3 class="font-semibold text-lg mb-2">Step 2: Enter Data & Options</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">Type the data you want to encode (one value per line for multiple barcodes) and choose whether to include human-readable text.</p>
+        </article>
+        <article class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-200">
+          <img src="https://placehold.co/80x80/png?text=Generate+Download" alt="Illustration of clicking generate button and downloading barcode" class="mb-4 rounded-full" />
+          <h3 class="font-semibold text-lg mb-2">Step 3: Generate, Download & Print</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">Click 'Generate' to preview, then use the 'Download PNG' or 'Print' buttons to get your barcodes.</p>
+        </article>
+      </div>
+    </section>
+     
+    <section>
+      <h2 class="text-2xl font-semibold mb-6 text-center">Barcode Types & Descriptions</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <article class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5 transform hover:scale-105 transition-transform duration-200">
+          <h3 class="font-semibold text-lg mb-2">EAN-13</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">European Article Numbering standard, 13 digits, widely used worldwide for retail products. <a href="#" class="text-indigo-500 hover:underline">Learn more</a></p>
+        </article>
+        <article class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5 transform hover:scale-105 transition-transform duration-200">
+          <h3 class="font-semibold text-lg mb-2">UPC-A</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">Universal Product Code, 12 digits, common in North America for retail scanning. <a href="#" class="text-indigo-500 hover:underline">Learn more</a></p>
+        </article>
+        <article class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5 transform hover:scale-105 transition-transform duration-200">
+          <h3 class="font-semibold text-lg mb-2">EAN-8</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">Shorter version of EAN-13, 8 digits, used for small packages where space is limited. <a href="#" class="text-indigo-500 hover:underline">Learn more</a></p>
+        </article>
+        <article class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5 transform hover:scale-105 transition-transform duration-200">
+          <h3 class="font-semibold text-lg mb-2">ITF</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">Interleaved 2 of 5, numeric only, used for packaging and warehouse labeling. <a href="#" class="text-indigo-500 hover:underline">Learn more</a></p>
+        </article>
+        <article class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5 transform hover:scale-105 transition-transform duration-200">
+          <h3 class="font-semibold text-lg mb-2">Code 39</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">Alphanumeric barcode, supports letters and numbers, used in automotive and defense industries. <a href="#" class="text-indigo-500 hover:underline">Learn more</a></p>
+        </article>
+        <article class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5 transform hover:scale-105 transition-transform duration-200">
+          <h3 class="font-semibold text-lg mb-2">Code 128</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">High-density alphanumeric barcode, used in shipping and packaging industries. <a href="#" class="text-indigo-500 hover:underline">Learn more</a></p>
+        </article>
+        <article class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5 transform hover:scale-105 transition-transform duration-200">
+          <h3 class="font-semibold text-lg mb-2">QR Code</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">Two-dimensional barcode that stores data in a matrix, widely used for URLs, contact info, and more. <a href="#" class="text-indigo-500 hover:underline">Learn more</a></p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="text-center text-sm py-4 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 mt-auto">
+    <div class="container mx-auto px-4">
+        <p>&copy; 2025 Barcode Generator. All rights reserved.</p>
+        <p class="mt-2"><a href="privacy-policy.html" class="text-indigo-600 hover:underline dark:text-indigo-400">Privacy Policy</a></p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
